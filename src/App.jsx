@@ -3,22 +3,34 @@ import { useState } from 'react'
 
 function App() {
   const Inventory = [
-    {name: "Blood Bags", quantity: 21},
-    {name:"Ventilators", quantity: 12},
-    {name: "IV Bags", quantity: 24}
+    {name: "Blood Bags", quantity: 12},
+    {name: "Pills", quantity: 64},
+    {name: "Carrots", quantity: 12}
   ]
+  
+  const [count, setCount] = useState(0)
 
   return (
-    <div>
-      <h1>Hospital Inventory Dashboard</h1>
-      {Inventory.map((item, index) => (
+    <div> 
+      <h1>Inventory Dashboard of Chicago Hospital</h1>
+      {Inventory.map((item, index) =>   (
         <div key={index}>
-          <h2>Name: {item.name}</h2>
-          <p>Quantity: {item.quantity}</p>
+        <h2>Item: {item.name}</h2>
+        <p>quantity: {item.quantity}</p>
         </div>
       ))}
-    </div>
+
+      <h3>Click the number to update the counter</h3>
+        <button>
+            click the number:
+          </button>
+            <button onClick={() => setCount(count+1)}>
+              {count}
+            </button>
+      </div>
   )
+
+  
 
 }
 
