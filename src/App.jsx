@@ -1,37 +1,32 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 
 function App() {
-  const Inventory = [
-    {name: "Blood Bags", quantity: 12},
-    {name: "Pills", quantity: 64},
-    {name: "Carrots", quantity: 12}
-  ]
+  const [stock, setStock] = useState(null)
+
+
+  useEffect(() => {
+    fetch("http://localhost:5000/stock")
+    .then(res => res.json())
+    .then(data => setStock(data.stock))
+    }, [])
   
-  const [count, setCount] = useState(0)
+  const updateStock = () => {
+      fetch("http://localhost:5000/stock", {method: "POST"})
+      .then(res => res.json())
+      .then(data => setStock(data.stock))
+    }
+
 
   return (
-    <div> 
-      <h1>Inventory Dashboard of Chicago Hospital</h1>
-      {Inventory.map((item, index) =>   (
-        <div key={index}>
-        <h2>Item: {item.name}</h2>
-        <p>quantity: {item.quantity}</p>
-        </div>
-      ))}
-
-      <h3>Click the number to update the counter</h3>
-        <button>
-            click the number:
-          </button>
-            <button onClick={() => setCount(count+1)}>
-              {count}
-            </button>
-      </div>
+    <div>
+    <h1>Inventory dashboard</h1>
+    <h2>Stock: {stock}</h2>
+    <button onClick={(updateStock)}>
+      Click to request stock
+    </button>
+</div>
   )
-
-  
-
 }
-
 export default App
+
