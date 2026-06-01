@@ -2,31 +2,43 @@ import { useEffect, useState } from 'react'
 
 
 function App() {
-  const [stock, setStock] = useState(null)
 
+  const [inventory, setInventory] = useState([])
 
   useEffect(() => {
-    fetch("http://localhost:5000/stock")
+    fetch("http://localhost:5000/inventory")
     .then(res => res.json())
-    .then(data => setStock(data.stock))
-    }, [])
-  
-  const updateStock = () => {
-      fetch("http://localhost:5000/stock", {method: "POST"})
-      .then(res => res.json())
-      .then(data => setStock(data.stock))
-    }
+    .then(data => setInventory(data))
+  }, [])
 
+  const requestBloodBag = () => {
+    fetch("http://localhost:5000/inventory", { method: "POST" })
+    .then(res => res.json())
+    .then(data => setInventory(data))
+  }
+
+  const BloodBag = inventory[0]
 
   return (
     <div>
-    <h1>Inventory dashboard</h1>
-    <h2>Stock: {stock}</h2>
-    <button onClick={(updateStock)}>
-      Click to request stock
-    </button>
-</div>
+      <h1>Hospital Inventory Dashboard</h1>
+      {inventory.map((item, index) => (
+        <div key={index}>
+          <h2>Name: {item.name}</h2>
+          <p>Stock: {item.stock}</p>
+          </div>
+      ))}
+      <h3>Click to request BloodBag</h3>
+      <button onClick={requestBloodBag}>Request Blood Bag:</button>
+    
+
+    {BloodBag && (
+      <div>
+      <h4>Blood Bag Stock: {BloodBag.stock}</h4>
+      </div>)
+    }
+    </div>
   )
 }
-export default App
 
+export default App
