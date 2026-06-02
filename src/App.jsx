@@ -3,21 +3,25 @@ import { useEffect, useState } from 'react'
 
 function App() {
 
-  const [inventory, setInventory] = useState([])
+const [inventory, setInventory] = useState([]) //setting up inventory/setinventory
 
-  useEffect(() => {
-    fetch("http://localhost:5000/inventory")
-    .then(res => res.json())
-    .then(data => setInventory(data))
-  }, [])
+useEffect(() => {
+  fetch(`http://localhost:5000/inventory`)  //fetch
+  .then(res => res.json())
+  .then(data => setInventory(data))
+}, [])
 
-  const requestBloodBag = () => {
-    fetch("http://localhost:5000/inventory", { method: "POST" })
-    .then(res => res.json())
-    .then(data => setInventory(data))
-  }
+const requestStock = (index) => {
+  fetch(`http://localhost:5000/inventory/${index}/request`, {method : "POST"})
+  .then(res => res.json())
+  .then(data => setInventory(data))
+}
 
-  const BloodBag = inventory[0]
+const donateStock = (index) => {
+  fetch(`http://localhost:5000/inventory/${index}/donate`, {method: "POST"})
+  .then(res => res.json())
+  .then(data => setInventory(data))
+}
 
   return (
     <div>
@@ -26,17 +30,13 @@ function App() {
         <div key={index}>
           <h2>Name: {item.name}</h2>
           <p>Stock: {item.stock}</p>
+          <button onClick={() => requestStock(index)}>Request {item.name}</button>
+          <button onClick={() => donateStock(index)}>Donate {item.name}</button>
+          <h3>----------------------------------------------------------------</h3>
           </div>
       ))}
-      <h3>Click to request BloodBag</h3>
-      <button onClick={requestBloodBag}>Request Blood Bag:</button>
-    
 
-    {BloodBag && (
-      <div>
-      <h4>Blood Bag Stock: {BloodBag.stock}</h4>
-      </div>)
-    }
+
     </div>
   )
 }
